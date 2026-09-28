@@ -7,21 +7,25 @@ const config: sql.config = {
   user: process.env.DB_USER!,
   password: process.env.DB_PASSWORD!,
   options: {
-    encrypt: true,          // Requerido para Azure; pon false si es VM local sin SSL
-    trustServerCertificate: true, // Para certificados autofirmados en VM propia
+    // Para VM local con VMware: encrypt false (no tiene certificado SSL)
+    // Si usas Azure o ngrok con SSL, cámbialo a true
+    encrypt: false,
+    trustServerCertificate: true,
   },
   pool: {
     max: 10,
     min: 0,
     idleTimeoutMillis: 30000,
   },
+  connectionTimeout: 15000,
+  requestTimeout: 15000,
 };
 
-// Pool singleton para reutilizar la conexión entre peticiones
+// Pool singleton — reutiliza la conexión entre peticiones en Vercel
 let pool: sql.ConnectionPool | null = null;
 
 export async function getDb(): Promise<sql.ConnectionPool> {
-  if (!pool) {
+  if (!pool || !pool.connected) {
     pool = await sql.connect(config);
   }
   return pool;
