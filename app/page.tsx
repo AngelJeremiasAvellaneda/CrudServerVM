@@ -138,7 +138,7 @@ export default function Home() {
 
       <div className="container">
         <div style={{ marginBottom: "0.5rem" }}>
-          <h1>Gestión de Productos</h1>
+          <h1>Gestión de Productos en Servidor VM</h1>
           <p className="subtitle">
             CRUD conectado a SQL Server en Windows Server 2022
           </p>
